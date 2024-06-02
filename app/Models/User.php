@@ -65,6 +65,11 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function likes()
+    {
+        return $this->belongsToMany(Idea::class, 'idea_like')->withTimestamps();
+    }
+
     public function getImageUrl()
     {
         if ($this->image) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\IdeaLikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Database\Query\IndexHint;
@@ -58,8 +59,15 @@ Route::post('users/{user}/unfollow', [FollowerController::class, 'unfollow'])
     ->middleware('auth')
     ->name('users.unfollow');
 
+Route::post('users/{user}/like', [IdeaLikeController::class, 'like'])
+    ->middleware('auth')
+    ->name('ideas.like');
+Route::post('ideas/{user}/unlike', [IdeaLikeController::class, 'unlike'])
+    ->middleware('auth')
+    ->name('ideas.unlike');
+
 Route::get('/terms', function () {
     return view('terms');
-});
+})->name('terms');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
