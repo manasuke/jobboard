@@ -65,6 +65,13 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function likesIdea(Idea $idea)
+    {
+        return $this->likes()
+            ->where('idea_id', $idea->id)
+            ->exists();
+    }
+
     public function likes()
     {
         return $this->belongsToMany(Idea::class, 'idea_like')->withTimestamps();

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateIdeaRequest;
 use App\Models\Idea;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class IdeaController extends Controller
@@ -11,11 +13,9 @@ class IdeaController extends Controller
     {
         return view('ideas.show', compact('idea'));
     }
-    public function store()
+    public function store(CreateIdeaRequest $request)
     {
-        $validate = request()->validate([
-            'content' => 'required|min:5|max:240',
-        ]);
+        $validate = $request->validate();
 
         $validate['user_id'] = auth()->id();
 
@@ -26,9 +26,10 @@ class IdeaController extends Controller
 
     public function destroy(Idea $idea)
     {
-        if (auth()->id() !== $idea->user_id) {
-            abort(404);
-        }
+        $this->authorize('delete', $idea);
+        // if (auth()->id() !== $idea->user_id) {
+        //     abort(404);
+        // }
         //($id)
         // Idea::where('id', $id)->firstOrFail()->delete();
         $idea->delete();
@@ -38,23 +39,23 @@ class IdeaController extends Controller
 
     public function edit(Idea $idea)
     {
-        if (auth()->id() !== $idea->user_id) {
-            abort(404);
-        }
+        $this->authorize('update', $idea);
+        // if (auth()->id() !== $idea->user_id) {
+        //     abort(404);
+        // }
 
         $editting = true;
         return view('ideas.show', compact('idea', 'editting'));
     }
 
-    public function update(Idea $idea)
+    public function update(CreateIdeaRequest $request, Idea $idea)
     {
-        if (auth()->id() !== $idea->user_id) {
-            abort(404);
-        }
+        $this->authorize('update', $idea);
+        // if (auth()->id() !== $idea->user_id) {
+        //     abort(404);
+        // }
 
-        $validate = request()->validate([
-            'content' => 'required|min:5|max:240',
-        ]);
+        $validate = $request->validate();
 
         $idea->update($validate);
 

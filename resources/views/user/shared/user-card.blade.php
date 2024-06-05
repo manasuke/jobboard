@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <img style="width:150px" class="me-3 avatar-sm rounded-circle" src="{{ $user->getImageUrl() }}"
-                    alt="Mario Avatar">
+                    alt="{{ $user->name }}">
                 <div>
                     <h3 class="card-title mb-0"><a href="#"> {{ $user->name }}
                         </a></h3>
@@ -11,11 +11,9 @@
                 </div>
             </div>
             <div>
-                @auth
-                    @if (Auth::id() === $user->id)
-                        <a href="{{ route('users.edit', $user->id) }}">Edit</a>
-                    @endif
-                @endauth
+                @can('update', $user)
+                    <a href="{{ route('users.edit', $user->id) }}">Edit</a>
+                @endcan
             </div>
         </div>
         <div class="px-2 mt-4">
@@ -24,16 +22,9 @@
                 {{ $user->bio }}
             </p>
 
-            <div class="d-flex justify-content-start">
-                <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-user me-1">
-                    </span> 0 Followers </a>
-                <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-brain me-1">
-                    </span> {{ $user->ideas()->count() }} </a>
-                <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-comment me-1">
-                    </span> {{ $user->comments()->count() }} </a>
-            </div>
+            @include('user.shared.user-stat')
             @auth
-                @if (Auth::id() !== $user->id)
+                @if (Auth::user()->isNot($user))
                     <div class="mt-3">
                         @if (Auth::user()->follows($user))
                             <form action="{{ route('users.unfollow', $user->id) }}" method="POST">

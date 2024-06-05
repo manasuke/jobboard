@@ -9,12 +9,12 @@
             @include('shared.success-message')
 
             <div class="mt-3">
-                @include('shared.user-edit-card')
+                @include('user.shared.user-edit-card')
             </div>
-            
+
             @forelse ($ideas as $idea)
                 <div class="mt-3">
-                    @include('shared.idea-card')
+                    @include('ideas.shared.idea-card')
                 </div>
             @empty
                 <p class="text-center mt-3">No Results Found</p>

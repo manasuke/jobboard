@@ -10,7 +10,7 @@
                     <div>
                         <input name="name" value="{{ $user->name }}" type="text" class="form-control">
                         @error('name')
-                            <span class="tex-danger fs-6">{{ $message }}</span>
+                            <span class="text-danger fs-6">{{ $message }}</span>
                         @enderror
                         <span class="fs-6 text-muted">{{ $user->email }}</span>
                     </div>
@@ -27,7 +27,7 @@
                 <label for="">Profile Picture</label>
                 <input name="image" type="file" class="form-control">
                 @error('image')
-                    <span class="tex-danger fs-6">{{ $message }}</span>
+                    <span class="text-danger fs-6">{{ $message }}</span>
                 @enderror
             </div>
             <div class="px-2 mt-4">
@@ -39,15 +39,6 @@
                     <span class="fs-6 text-danger">{{ $message }}</span>
                 @enderror
                 <button class="btn btn-dark btn-sm mb-3">Save</button>
-
-                <div class="d-flex justify-content-start">
-                    <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-user me-1">
-                        </span> 0 Followers </a>
-                    <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-brain me-1">
-                        </span> {{ $user->ideas()->count() }} </a>
-                    <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-comment me-1">
-                        </span> {{ $user->comments()->count() }} </a>
-                </div>
                 @auth
                     @if (Auth::id() !== $user->id)
                         <div class="mt-3">
@@ -56,6 +47,7 @@
                     @endif
                 @endauth
 
+                @include('user.shared.user-stat')
             </div>
         </form>
     </div>

@@ -10,14 +10,18 @@
                         </a></h5>
                 </div>
             </div>
-            <div>
-                <form action="{{ route('idea.destroy', $idea->id) }}" method="post">
-                    @csrf
-                    @method('delete')
-                    <a class="ms-2" href="{{ route('idea.edit', $idea->id) }}">Edit</a>
-                    <a class="ms-2" href="{{ route('idea.show', $idea->id) }}">View</a>
-                    <button class="btn btn-danger btn-sm "> X </button>
-                </form>
+            <div class="d-flex align-items-center">
+                <a class="ms-2" href="{{ route('idea.show', $idea->id) }}">View</a>
+                @auth
+                    @can('update', $idea)
+                        <form action="{{ route('idea.destroy', $idea->id) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <a class="ms-2" href="{{ route('idea.edit', $idea->id) }}">Edit</a>
+                            <button class="btn btn-danger btn-sm"> X </button>
+                        </form>
+                    @endcan
+                @endauth
             </div>
         </div>
     </div>
@@ -45,9 +49,9 @@
             @include('ideas.shared.like-button')
             <div>
                 <span class="fs-6 fw-light text-muted"> <span class="fas fa-clock"> </span>
-                    {{ $idea->created_at }} </span>
+                    {{ $idea->created_at->diffForHumans() }} </span>
             </div>
         </div>
-        @include('shared.comment-box')
+        @include('ideas.shared.comment-box')
     </div>
 </div>
